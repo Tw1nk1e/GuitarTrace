@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "watcher": {
+    "ignore": [
+      "out/**",
+      "models/**",
+      ".venv/**",
+      ".pytest_cache/**",
+      "**/__pycache__/**"
+    ]
+  },
+  "tool_output": {
+    "max_lines": 300,
+    "max_bytes": 20000
+  },
+  // Ask before any Git command except routine read-only inspection.
+  // This also covers destructive operations with options such as git -C.
+  "permissions": [
+    { "action": "shell", "resource": "git *", "effect": "ask" },
+    { "action": "shell", "resource": "git.exe *", "effect": "ask" },
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git show *", "effect": "allow" },
+    { "action": "shell", "resource": "git ls-files *", "effect": "allow" }
+  ]
+}

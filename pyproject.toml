@@ -1,0 +1,58 @@
+[project]
+name = "gbcv"
+version = "0.1.0"
+description = "GuitarTrace: guitar photo to editable SVG/PNG outline, CPU-only"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "docs/licensing.md", "docs/sam2-provenance.md"]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.162.0",
+    "numpy>=2.0",
+    "onnxruntime>=1.31.1",
+    "opencv-python-headless>=5.0.0.93",
+    "pillow>=11.0",
+    "pydantic>=2.9",
+    "python-multipart>=0.0.32",
+    "sam2>=1.1.0",
+    "scipy>=1.18.1",
+    "torch>=2.5.1",
+    "uvicorn>=0.54.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3"]
+
+[project.urls]
+Repository = "https://github.com/Tw1nk1e/GuitarTrace"
+Issues = "https://github.com/Tw1nk1e/GuitarTrace/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gbcv"]
+
+# Source-only release: never collect local models, photos, outputs or environments.
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src", "/scripts", "/tests", "/docs", "/eval", "/.github",
+    "/README.md", "/LICENSE", "/THIRD_PARTY_NOTICES.md", "/AGENTS.md",
+    "/CLAUDE.md", "/PLAN.md", "/pyproject.toml", "/uv.lock", "/trace.py",
+    "/Запуск.cmd", "/.env.example", "/.python-version", "/.gitignore", "/.gitattributes",
+]
+exclude = ["/models", "/samples", "/out", "/reference", "/.venv", "**/__pycache__", "**/*.pyc"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]
+
+# PyTorch CPU-only wheels (SAM 2 for tracing parts); no CUDA on the VPS
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
